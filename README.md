@@ -21,22 +21,40 @@ pip install crypto-data-cache
 ## Quick Start
 
 ```python
-from crypto_data_cache.fetch_utils import fetch_historical_data
-from crypto_data_cache.configurations import DATA_TYPES
-from pathlib import Path
+from crypto_data_cache import CryptoDataCache, DATA_TYPES
+
+# Initialize the client (uses default database location)
+cache = CryptoDataCache()
 
 # Fetch Bitcoin 1-hour kline data
-df = fetch_historical_data(
+df = cache.fetch_data(
     symbol="BTCUSDT",
     data_type=DATA_TYPES.KLINE,
     start_date_str="2024-01-01",
     end_date_str="2024-01-31",
-    db_file=Path("crypto_data.db"),
     interval="1h"
 )
 
 print(f"Loaded {len(df)} rows of data")
 print(df.head())
+```
+
+### Advanced Usage (Direct Functions)
+
+```python
+from crypto_data_cache.fetch_utils import fetch_historical_data
+from crypto_data_cache.configurations import DATA_TYPES
+from pathlib import Path
+
+# Direct function usage with custom database path
+df = fetch_historical_data(
+    symbol="BTCUSDT",
+    data_type=DATA_TYPES.KLINE,
+    start_date_str="2024-01-01",
+    end_date_str="2024-01-31",
+    db_file=Path("custom_crypto_data.db"),
+    interval="1h"
+)
 ```
 
 ## Supported Data Types
@@ -55,10 +73,20 @@ The library automatically handles:
 
 ## API Reference
 
-### Main Functions
+### CryptoDataCache Class
+
+The main client class providing a high-level interface:
+
+#### `CryptoDataCache(db_path=None)`
+Initialize the client with optional custom database path.
+
+#### `fetch_data()`
+Primary method for fetching historical data.
+
+### Direct Functions
 
 #### `fetch_historical_data()`
-The primary function for fetching historical data.
+Lower-level function for direct access.
 
 **Parameters:**
 - `symbol` (str): Trading pair symbol (e.g., "BTCUSDT")
@@ -112,21 +140,20 @@ Built-in logging provides detailed information about:
 ### Fetch Multiple Intervals
 
 ```python
-from crypto_data_cache.fetch_utils import fetch_historical_data
-from crypto_data_cache.configurations import DATA_TYPES
-from pathlib import Path
+from crypto_data_cache import CryptoDataCache, DATA_TYPES
+
+# Initialize once, reuse for multiple requests
+cache = CryptoDataCache()
 
 # Fetch different intervals
 intervals = ["1h", "4h", "1d"]
-db_file = Path("crypto_data.db")
 
 for interval in intervals:
-    df = fetch_historical_data(
+    df = cache.fetch_data(
         symbol="ETHUSDT",
         data_type=DATA_TYPES.KLINE,
         start_date_str="2024-01-01",
         end_date_str="2024-01-31",
-        db_file=db_file,
         interval=interval
     )
     print(f"{interval}: {len(df)} rows")
@@ -136,13 +163,21 @@ for interval in intervals:
 
 ```python
 # Fetch individual trade data
-trades_df = fetch_historical_data(
+cache = CryptoDataCache()
+trades_df = cache.fetch_data(
     symbol="BTCUSDT",
     data_type=DATA_TYPES.TRADE,
     start_date_str="2024-01-01",
-    end_date_str="2024-01-02",
-    db_file=Path("trades.db")
+    end_date_str="2024-01-02"
 )
+```
+
+### Custom Database Location
+
+```python
+# Use custom database path
+cache = CryptoDataCache(db_path="/path/to/my/crypto_data.db")
+df = cache.fetch_data("ETHUSDT", DATA_TYPES.KLINE, "2024-01-01", "2024-01-31", "1d")
 ```
 
 ## Requirements
