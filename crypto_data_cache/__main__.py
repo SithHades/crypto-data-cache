@@ -29,7 +29,7 @@ class CryptoDataCache:
         interval: str,
         start_date_str: str,
         end_date_str: str,
-        prefer_monthly: Optional[bool] = None,
+        prefer_monthly: Optional[bool] = True,
     ):
         """
         Fetches historical data for a given cryptocurrency symbol and data type within a specified date range and interval.
@@ -53,5 +53,5 @@ class CryptoDataCache:
             end_date_str,
             db_file=self.db_path,
             interval=interval,
-            prefer_monthly=prefer_monthly,
+            prefer_monthly=prefer_monthly if prefer_monthly is not None else True,
         )
