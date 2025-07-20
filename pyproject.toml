@@ -1,0 +1,13 @@
+[project]
+name = "crypto-data-cache"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pandas>=2.3.1",
+    "requests>=2.32.4",
+    "rich>=14.0.0",
+    "ruff>=0.12.4",
+    "ty>=0.0.1a15",
+]
