@@ -1,12 +1,12 @@
 [project]
 name = "crypto-data-cache"
-version = "0.1.0"
+version = "0.2.0"
 description = "A Python library for efficiently downloading, caching, and managing cryptocurrency market data from Binance"
 readme = "README.md"
 requires-python = ">=3.13"
 license = {text = "MIT"}
 authors = [
-    {name = "Luca", email = "your.email@example.com"}
+    {name = "Luca B. Knaack", email = "l.knaack93@gmail.com"}
 ]
 keywords = ["cryptocurrency", "binance", "data", "cache", "trading", "kline", "market-data"]
 classifiers = [
@@ -28,9 +28,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/crypto-data-cache"
-Repository = "https://github.com/yourusername/crypto-data-cache.git"
-Issues = "https://github.com/yourusername/crypto-data-cache/issues"
+Homepage = "https://github.com/SithHades/crypto-data-cache"
+Repository = "https://github.com/SithHades/crypto-data-cache.git"
+Issues = "https://github.com/SithHades/crypto-data-cache/issues"
 
 [build-system]
 requires = ["hatchling"]
