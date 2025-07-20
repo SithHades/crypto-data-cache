@@ -13,7 +13,11 @@ from crypto_data_cache.configurations import (
     FREQUENCY_DAILY,
     FREQUENCY_MONTHLY,
 )
-from crypto_data_cache.db_utils import get_db_connection, create_table_if_not_exists, store_dataframe
+from crypto_data_cache.db_utils import (
+    get_db_connection,
+    create_table_if_not_exists,
+    store_dataframe,
+)
 from .download_utils import download_zip_and_extract_csv
 from crypto_data_cache.exceptions import DownloadFailedError, DatabaseError
 
@@ -605,9 +609,7 @@ def fetch_historical_data(
                         )
                         # pd.Series.map({1: True, 0: False}) might be safer if mixed types or NaNs present
                         df[col] = (
-                            df[col]
-                            .map({1: True, 0: False})
-                            .astype("boolean")
+                            df[col].map({1: True, 0: False}).astype("boolean")
                         )  # Pandas nullable bool
 
             logger.info(

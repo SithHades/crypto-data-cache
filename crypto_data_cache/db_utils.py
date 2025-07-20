@@ -24,7 +24,10 @@ def get_db_connection(
 
 
 def create_table_if_not_exists(
-    conn: sqlite3.Connection, symbol: str, data_type: DATA_TYPES, interval: str | None = None
+    conn: sqlite3.Connection,
+    symbol: str,
+    data_type: DATA_TYPES,
+    interval: str | None = None,
 ):
     """
     Creates an SQLite table based on the predefined schema if it does not exist.
@@ -130,7 +133,10 @@ def store_dataframe(
 
 
 def get_db_date_range(
-    conn: sqlite3.Connection, symbol: str, data_type: DATA_TYPES, interval: str | None = None
+    conn: sqlite3.Connection,
+    symbol: str,
+    data_type: DATA_TYPES,
+    interval: str | None = None,
 ) -> tuple[pd.Timestamp | None, pd.Timestamp | None]:
     """
     Gets the min and max date (as UTC pandas Timestamps) stored in the table.

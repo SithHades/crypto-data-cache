@@ -10,11 +10,15 @@ DATA_TYPE_KLINE = "klines"
 DATA_TYPE_TRADE = "trades"
 DATA_TYPE_AGGTRADE = "aggTrades"
 
+
 class DATA_TYPES(Enum):
     """Enum for supported data types."""
+
     KLINE = DATA_TYPE_KLINE
     TRADE = DATA_TYPE_TRADE
     AGGTRADE = DATA_TYPE_AGGTRADE
+
+
 # Frequencies supported
 FREQUENCY_DAILY = "daily"
 FREQUENCY_MONTHLY = "monthly"
@@ -143,7 +147,9 @@ def get_schema(data_type: DATA_TYPES) -> dict:
     return SCHEMAS[data_type]
 
 
-def get_table_name(symbol: str, data_type: DATA_TYPES, interval: str | None = None) -> str:
+def get_table_name(
+    symbol: str, data_type: DATA_TYPES, interval: str | None = None
+) -> str:
     """Generates the standard table name."""
     if data_type == DATA_TYPES.KLINE:
         if not interval:
