@@ -80,7 +80,7 @@ def download_and_store_data(
         create_table_if_not_exists(conn, symbol, data_type, interval)
 
         logger.info(
-            f"Starting download for {symbol} {data_type} {frequency} {date_str}"
+            f"Starting download for {symbol} {data_type.value} {frequency} {date_str}"
         )
         try:
             df_raw = download_zip_and_extract_csv(
@@ -89,29 +89,29 @@ def download_and_store_data(
         except DownloadFailedError as e:
             if "404" in str(e):
                 logger.warning(
-                    f"Data not found (404) for {symbol} {data_type} {frequency} {date_str}"
+                    f"Data not found (404) for {symbol} {data_type.value} {frequency} {date_str}"
                 )
                 return 0
             logger.error(
-                f"Download failed for {symbol} {data_type} {frequency} {date_str}: {str(e)}",
+                f"Download failed for {symbol} {data_type.value} {frequency} {date_str}: {str(e)}",
                 exc_info=True,
             )
             return -1
         except Exception as e:
             logger.error(
-                f"Unexpected error during download for {symbol} {data_type} {frequency} {date_str}: {str(e)}",
+                f"Unexpected error during download for {symbol} {data_type.value} {frequency} {date_str}: {str(e)}",
                 exc_info=True,
             )
             return -1
 
         if df_raw is None or df_raw.empty:
             logger.warning(
-                f"No data available or downloaded for {symbol} {data_type} {frequency} {date_str}"
+                f"No data available or downloaded for {symbol} {data_type.value} {frequency} {date_str}"
             )
             return 0
 
         logger.debug(
-            f"Downloaded {len(df_raw)} rows of data for {symbol} {data_type} {date_str}"
+            f"Downloaded {len(df_raw)} rows of data for {symbol} {data_type.value} {date_str}"
         )
 
         schema_config = get_schema(data_type)
@@ -208,35 +208,35 @@ def download_and_store_data(
             )
             if inserted_count > 0:
                 logger.info(
-                    f"Successfully stored {inserted_count} rows for {symbol} {data_type} {frequency} {date_str}"
+                    f"Successfully stored {inserted_count} rows for {symbol} {data_type.value} {frequency} {date_str}"
                 )
             else:
                 logger.info(  # Changed from warning to info, as 0 new rows is common for existing data
-                    f"No new data was stored for {symbol} {data_type} {frequency} {date_str}. "
+                    f"No new data was stored for {symbol} {data_type.value} {frequency} {date_str}. "
                     "This is expected if data already exists or no valid rows were processed."
                 )
             return inserted_count
         except DatabaseError as e:  # Catch specific DatabaseError from store_dataframe
             logger.error(
-                f"Database error storing data for {symbol} {data_type} {frequency} {date_str}: {e}",
+                f"Database error storing data for {symbol} {data_type.value} {frequency} {date_str}: {e}",
                 exc_info=True,
             )
             return 0  # Treat as failed storage for this file, but not a global download failure for -1
         except Exception as e:
             logger.error(
-                f"Unexpected error storing data for {symbol} {data_type} {frequency} {date_str}: {e}",
+                f"Unexpected error storing data for {symbol} {data_type.value} {frequency} {date_str}: {e}",
                 exc_info=True,
             )
             return 0  # Treat as failed storage for this file
 
     except (DownloadFailedError, DatabaseError) as e:  # These are more critical
         logger.error(
-            f"Failed to download/store {frequency} {data_type} for {symbol} ({date_str}): {e}",
+            f"Failed to download/store {frequency} {data_type.value} for {symbol} ({date_str}): {e}",
         )
         return -1
     except Exception as e:
         logger.error(
-            f"Unexpected error during download/store for {symbol} {data_type} ({date_str}): {e}",
+            f"Unexpected error during download/store for {symbol} {data_type.value} ({date_str}): {e}",
             exc_info=True,
         )
         return -1
@@ -355,7 +355,7 @@ def fetch_historical_data(
         raise ValueError("Interval must be specified for data_type 'klines'")
     if data_type != DATA_TYPES.KLINE and interval:
         logger.warning(
-            f"Warning: Interval '{interval}' provided but not used for data_type '{data_type}'.",
+            f"Warning: Interval '{interval}' provided but not used for data_type '{data_type.value}'.",
         )
         interval = None
 
@@ -402,7 +402,7 @@ def fetch_historical_data(
         return pd.DataFrame()
 
     logger.info(
-        f"Requesting {data_type} for {symbol} ({interval or 'N/A'}) from {_start_date_naive} to {_end_date_naive}",
+        f"Requesting {data_type.value} for {symbol} ({interval or 'N/A'}) from {_start_date_naive} to {_end_date_naive}",
     )
 
     conn = get_db_connection(db_file)
@@ -613,7 +613,7 @@ def fetch_historical_data(
                         )  # Pandas nullable bool
 
             logger.info(
-                f"Successfully loaded {len(df)} rows of {data_type} data for {symbol}."
+                f"Successfully loaded {len(df)} rows of {data_type.value} data for {symbol}."
             )
 
         end_time_total = time.time()

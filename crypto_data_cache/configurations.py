@@ -193,7 +193,7 @@ def build_download_url(
             raise ValueError("Interval is required for Kline data type.")
         url = BINANCE_DATA_URL.format(
             frequency=frequency,
-            data_type=data_type,
+            data_type=data_type.value,
             symbol=symbol,
             interval=interval,
             filename=filename,
@@ -201,7 +201,7 @@ def build_download_url(
     elif data_type in [DATA_TYPES.TRADE, DATA_TYPES.AGGTRADE]:
         # Trades/AggTrades URL structure is slightly different (no interval folder)
         url = BINANCE_TRADES_URL.format(
-            frequency=frequency, data_type=data_type, symbol=symbol, filename=filename
+            frequency=frequency, data_type=data_type.value, symbol=symbol, filename=filename
         )
     else:
         raise ValueError(f"Cannot build URL for unknown data type: {data_type}")
